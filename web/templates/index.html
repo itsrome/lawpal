@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LawPal – Intelligent Legal Simplification</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0c14;--surface:#111420;--card:#161926;--border:#1e2235;
+  --accent:#4f8ef7;--accent2:#7c5cbf;--green:#3ecf8e;--yellow:#f5a623;
+  --red:#e05c5c;--text:#e8eaf0;--sub:#8b90a0;--white:#fff;
+  --radius:14px;--shadow:0 8px 32px rgba(0,0,0,.4);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,12,20,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:.6rem;font-size:1.3rem;font-weight:800;color:var(--white)}
+.nav-logo i{color:var(--accent);font-size:1.5rem}
+.nav-links{display:flex;gap:.25rem}
+.nav-links a{color:var(--sub);text-decoration:none;padding:.5rem 1rem;border-radius:8px;font-size:.9rem;font-weight:500;transition:.2s}
+.nav-links a:hover,.nav-links a.active{color:var(--white);background:var(--border)}
+.nav-badge{background:var(--accent);color:#fff;font-size:.7rem;padding:.15rem .5rem;border-radius:20px;margin-left:.4rem}
+
+/* ── HERO ── */
+.hero{padding:120px 2rem 60px;text-align:center;max-width:800px;margin:0 auto}
+.hero-tag{display:inline-flex;align-items:center;gap:.5rem;background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.3);color:var(--accent);padding:.4rem 1rem;border-radius:20px;font-size:.85rem;font-weight:600;margin-bottom:1.5rem}
+.hero h1{font-size:clamp(2.2rem,5vw,3.8rem);font-weight:800;line-height:1.15;margin-bottom:1rem}
+.hero h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--sub);font-size:1.1rem;line-height:1.7;margin-bottom:2rem;max-width:600px;margin-left:auto;margin-right:auto}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn{padding:.75rem 1.75rem;border-radius:10px;font-size:.95rem;font-weight:600;cursor:pointer;border:none;transition:.2s;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#3a7de8;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-outline:hover{background:var(--card);transform:translateY(-1px)}
+
+/* ── STATS ── */
+.stats{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;padding:2rem;margin:0 auto;max-width:900px}
+.stat{text-align:center}
+.stat-val{font-size:2rem;font-weight:800;color:var(--accent)}
+.stat-lbl{color:var(--sub);font-size:.85rem;margin-top:.2rem}
+
+/* ── SECTIONS ── */
+section{padding:4rem 2rem;max-width:1100px;margin:0 auto}
+.section-title{font-size:1.8rem;font-weight:700;margin-bottom:.5rem}
+.section-sub{color:var(--sub);margin-bottom:2.5rem;font-size:1rem}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;background:var(--surface);padding:.4rem;border-radius:12px;width:fit-content}
+.tab{padding:.6rem 1.4rem;border-radius:9px;cursor:pointer;font-size:.9rem;font-weight:600;color:var(--sub);border:none;background:transparent;transition:.2s}
+.tab.active{background:var(--accent);color:#fff}
+
+/* ── TOOL CARD ── */
+.tool-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;box-shadow:var(--shadow)}
+.tool-label{font-size:.8rem;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem}
+textarea,input[type=text]{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;color:var(--text);font-family:'Inter',sans-serif;font-size:.95rem;resize:vertical;outline:none;transition:.2s}
+textarea:focus,input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,142,247,.15)}
+textarea{min-height:140px}
+.tool-row{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:700px){.tool-row{grid-template-columns:1fr}}
+.tool-actions{display:flex;gap:.75rem;margin-top:1rem;flex-wrap:wrap}
+.btn-sm{padding:.55rem 1.2rem;font-size:.85rem;border-radius:8px;font-weight:600;cursor:pointer;border:none;transition:.2s;display:inline-flex;align-items:center;gap:.4rem}
+.btn-run{background:var(--accent);color:#fff}
+.btn-run:hover{background:#3a7de8}
+.btn-eg{background:var(--accent2);color:#fff}
+.btn-eg:hover{background:#6a4aad}
+.btn-clr{background:var(--red);color:#fff}
+.btn-clr:hover{background:#c94a4a}
+.btn-copy{background:var(--surface);color:var(--text);border:1px solid var(--border)}
+.btn-copy:hover{background:var(--border)}
+.output-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;min-height:140px;font-size:.95rem;line-height:1.7;white-space:pre-wrap;color:var(--text);position:relative}
+.output-placeholder{color:var(--sub);font-style:italic}
+.status-bar{display:flex;align-items:center;gap:1rem;margin-top:.75rem;font-size:.8rem;color:var(--sub);flex-wrap:wrap}
+.status-ok{color:var(--green)}
+.law-badge{background:rgba(79,142,247,.12);border:1px solid rgba(79,142,247,.25);color:var(--accent);padding:.2rem .7rem;border-radius:20px;font-size:.75rem;font-weight:600}
+.topic-badge{background:rgba(124,92,191,.12);border:1px solid rgba(124,92,191,.25);color:var(--accent2);padding:.2rem .7rem;border-radius:20px;font-size:.75rem;font-weight:600}
+
+/* ── SAMPLES ── */
+.samples{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+.sample-btn{background:var(--surface);border:1px solid var(--border);color:var(--sub);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;cursor:pointer;transition:.2s;font-family:'Inter',sans-serif}
+.sample-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(79,142,247,.08)}
+
+/* ── FEATURES ── */
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem}
+.feature-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;transition:.2s}
+.feature-card:hover{border-color:var(--accent);transform:translateY(-3px)}
+.feature-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1rem}
+.feature-card h3{font-size:1rem;font-weight:700;margin-bottom:.4rem}
+.feature-card p{color:var(--sub);font-size:.875rem;line-height:1.6}
+
+/* ── LANG SELECTOR ── */
+.lang-row{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+.lang-btn{padding:.35rem .9rem;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--sub);font-size:.8rem;font-weight:600;cursor:pointer;transition:.2s;font-family:'Inter',sans-serif}
+.lang-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* ── DISCLAIMER ── */
+.disclaimer{background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.3);border-radius:12px;padding:1rem 1.25rem;display:flex;align-items:flex-start;gap:.75rem;margin-bottom:2rem;font-size:.875rem;color:var(--yellow)}
+.disclaimer i{margin-top:.1rem;flex-shrink:0}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--sub);font-size:.85rem;margin-top:4rem}
+footer strong{color:var(--text)}
+
+/* ── SPINNER ── */
+.spinner{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading .spinner{display:inline-block}
+.loading .btn-text{display:none}
+
+/* ── SCROLL ── */
+html{scroll-behavior:smooth}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><i class="fas fa-scale-balanced"></i> LawPal</div>
+  <div class="nav-links">
+    <a href="#simplify" class="active">Simplify</a>
+    <a href="#ask">Ask</a>
+    <a href="#features">Features</a>
+    <a href="#about">About</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag"><i class="fas fa-robot"></i> AI-Powered Legal Assistant</div>
+  <h1>Understand the Law.<br><span>Without a Law Degree.</span></h1>
+  <p>LawPal simplifies complex legal language and answers your legal questions — in English, Amharic, and Afaan Oromo. Powered by Ethiopian law.</p>
+  <div class="hero-btns">
+    <a href="#simplify" class="btn btn-primary"><i class="fas fa-wand-magic-sparkles"></i> Simplify Text</a>
+    <a href="#ask" class="btn btn-outline"><i class="fas fa-comments"></i> Ask a Question</a>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-val">100+</div><div class="stat-lbl">Legal Terms</div></div>
+  <div class="stat"><div class="stat-val">14+</div><div class="stat-lbl">Rule Topics</div></div>
+  <div class="stat"><div class="stat-val">3</div><div class="stat-lbl">Languages</div></div>
+  <div class="stat"><div class="stat-val">&lt;2s</div><div class="stat-lbl">Response Time</div></div>
+  <div class="stat"><div class="stat-val">Free</div><div class="stat-lbl">Always</div></div>
+</div>
+
+<!-- DISCLAIMER -->
+<div style="max-width:1100px;margin:0 auto;padding:0 2rem">
+  <div class="disclaimer">
+    <i class="fas fa-triangle-exclamation"></i>
+    <span><strong>Disclaimer:</strong> LawPal provides general legal information only — NOT professional legal advice. For serious matters, always consult a qualified lawyer.</span>
+  </div>
+</div>
+
+<!-- SIMPLIFY SECTION -->
+<section id="simplify">
+  <div class="section-title">📝 Simplify Legal Text</div>
+  <div class="section-sub">Paste any legal paragraph and get a plain-language version instantly.</div>
+
+  <div class="lang-row">
+    <button class="lang-btn active" onclick="setLang('en',this)">🇬🇧 English</button>
+    <button class="lang-btn" onclick="setLang('am',this)">🇪🇹 Amharic</button>
+    <button class="lang-btn" onclick="setLang('or',this)">🇪🇹 Afaan Oromo</button>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-row">
+      <div>
+        <div class="tool-label">Original Legal Text</div>
+        <textarea id="simp-input" placeholder="Paste your legal text here..."></textarea>
+        <div class="tool-actions">
+          <button class="btn-sm btn-run" id="simp-btn" onclick="runSimplify()">
+            <span class="spinner"></span><span class="btn-text"><i class="fas fa-bolt"></i> Simplify</span>
+          </button>
+          <button class="btn-sm btn-eg" onclick="loadExample()"><i class="fas fa-file-lines"></i> Example</button>
+          <button class="btn-sm btn-clr" onclick="clearSimplify()"><i class="fas fa-trash"></i> Clear</button>
+        </div>
+      </div>
+      <div>
+        <div class="tool-label">Simplified Version</div>
+        <div class="output-box" id="simp-output"><span class="output-placeholder">Your simplified text will appear here...</span></div>
+        <div class="tool-actions">
+          <button class="btn-sm btn-copy" onclick="copyText('simp-output')"><i class="fas fa-copy"></i> Copy</button>
+        </div>
+        <div class="status-bar" id="simp-status"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ASK SECTION -->
+<section id="ask">
+  <div class="section-title">💬 Ask LawPal</div>
+  <div class="section-sub">Type a legal question and get a clear, structured answer based on Ethiopian law.</div>
+
+  <div class="tool-card">
+    <div class="tool-label">Your Question</div>
+    <textarea id="ask-input" rows="3" placeholder="e.g. Can my landlord enter my room without permission?" style="min-height:90px" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();runAsk()}"></textarea>
+
+    <div class="samples">
+      <span style="font-size:.8rem;color:var(--sub);align-self:center">Try:</span>
+      <button class="sample-btn" onclick="loadQ(this)">Can my landlord enter my room?</button>
+      <button class="sample-btn" onclick="loadQ(this)">What are my rights if I am arrested?</button>
+      <button class="sample-btn" onclick="loadQ(this)">Can I appeal a traffic fine?</button>
+      <button class="sample-btn" onclick="loadQ(this)">Can a university suspend me without a hearing?</button>
+      <button class="sample-btn" onclick="loadQ(this)">What happens if I break my contract?</button>
+      <button class="sample-btn" onclick="loadQ(this)">Can my landlord keep my deposit?</button>
+    </div>
+
+    <div class="tool-actions" style="margin-top:1rem">
+      <button class="btn-sm btn-run" id="ask-btn" onclick="runAsk()">
+        <span class="spinner"></span><span class="btn-text"><i class="fas fa-magnifying-glass"></i> Ask</span>
+      </button>
+      <button class="btn-sm btn-clr" onclick="clearAsk()"><i class="fas fa-trash"></i> Clear</button>
+    </div>
+
+    <div style="margin-top:1.5rem">
+      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem">
+        <div class="tool-label" style="margin:0">Answer</div>
+        <span id="ask-topic" class="topic-badge" style="display:none"></span>
+        <span id="ask-law" class="law-badge" style="display:none"></span>
+      </div>
+      <div class="output-box" id="ask-output"><span class="output-placeholder">Your answer will appear here...</span></div>
+      <div class="tool-actions">
+        <button class="btn-sm btn-copy" onclick="copyText('ask-output')"><i class="fas fa-copy"></i> Copy</button>
+      </div>
+      <div class="status-bar" id="ask-status"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-title">✨ Features</div>
+  <div class="section-sub">Everything LawPal can do for you.</div>
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(79,142,247,.12);color:var(--accent)"><i class="fas fa-language"></i></div>
+      <h3>3 Languages</h3>
+      <p>Works in English, Amharic (አማርኛ), and Afaan Oromo — the three most spoken languages in Ethiopia.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(62,207,142,.12);color:var(--green)"><i class="fas fa-book-open"></i></div>
+      <h3>Ethiopian Law</h3>
+      <p>Answers are grounded in real Ethiopian laws: Constitution, Civil Code, Labour Proclamation, Traffic Proclamation, and more.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(124,92,191,.12);color:var(--accent2)"><i class="fas fa-wand-magic-sparkles"></i></div>
+      <h3>Text Simplification</h3>
+      <p>Replaces 100+ complex legal terms with plain language. Breaks long sentences into shorter, readable ones.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(245,166,35,.12);color:var(--yellow)"><i class="fas fa-bolt"></i></div>
+      <h3>Instant Answers</h3>
+      <p>Rule-based AI gives you answers in under 2 seconds. No internet required after setup.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(224,92,92,.12);color:var(--red)"><i class="fas fa-shield-halved"></i></div>
+      <h3>Know Your Rights</h3>
+      <p>Covers tenant rights, employment, traffic, student rights, family law, criminal law, and constitutional rights.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(79,142,247,.12);color:var(--accent)"><i class="fas fa-graduation-cap"></i></div>
+      <h3>For Everyone</h3>
+      <p>Designed for students, renters, drivers, employees — anyone who needs to understand legal information without a lawyer.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-title">ℹ️ About LawPal</div>
+  <div class="section-sub">A student project from Madda Walabu University.</div>
+  <div class="tool-card" style="max-width:700px">
+    <p style="line-height:1.8;color:var(--sub);margin-bottom:1rem">LawPal is an AI-based system designed to make legal information more understandable and accessible. It uses rule-based logic and basic NLP to simplify legal text and answer common legal questions.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;font-size:.875rem">
+      <div><span style="color:var(--sub)">Prepared by:</span><br><strong>Rahma Jemal (UGRR/52265/1)</strong></div>
+      <div><span style="color:var(--sub)">Submitted to:</span><br><strong>Mr. Shume.B</strong></div>
+      <div><span style="color:var(--sub)">University:</span><br><strong>Madda Walabu University</strong></div>
+      <div><span style="color:var(--sub)">Department:</span><br><strong>Computer Science</strong></div>
+      <div><span style="color:var(--sub)">Tech Stack:</span><br><strong>Python · Flask · HTML/CSS/JS</strong></div>
+      <div><span style="color:var(--sub)">Version:</span><br><strong>1.0</strong></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <strong>⚖ LawPal</strong> — Intelligent Legal Simplification & Advisory System<br>
+  <span style="margin-top:.4rem;display:block">Madda Walabu University · College of Computing · Computer Science · 2024</span>
+</footer>
+
+<script>
+let currentLang = 'en';
+
+const EXAMPLES = {
+  en: "The lessee hereby agrees to indemnify the lessor against any and all losses, damages, or claims arising from the lessee's use or occupancy of the leased premises, including but not limited to those caused by negligence or willful misconduct. Notwithstanding the aforementioned, the lessor shall forthwith notify the lessee pursuant to the provisions herein.",
+  am: "ተከራዩ ቤቱን ሲጠቀም ወይም ሲኖርበት ከሚደርሰው ማናቸውም ኪሳራ፣ ጉዳት ወይም ጥያቄ አከራዩን ለመካስ ይስማማል። ይህ ቢሆንም አከራዩ ወዲያውኑ ተከራዩን ማሳወቅ አለበት።",
+  or: "Kireessaan mana kireeffataa fayyadamuun yookiin keessatti jiraachuun miidhaa, kasaaraa, yookiin gaaffii kamiyyuu kaffaluuf waliigala. Kana malees, kireessaan hatattamaan kireeffataa beeksisuu qaba."
+};
+
+function setLang(lang, btn) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function loadExample() {
+  document.getElementById('simp-input').value = EXAMPLES[currentLang];
+}
+
+function clearSimplify() {
+  document.getElementById('simp-input').value = '';
+  document.getElementById('simp-output').innerHTML = '<span class="output-placeholder">Your simplified text will appear here...</span>';
+  document.getElementById('simp-status').innerHTML = '';
+}
+
+function clearAsk() {
+  document.getElementById('ask-input').value = '';
+  document.getElementById('ask-output').innerHTML = '<span class="output-placeholder">Your answer will appear here...</span>';
+  document.getElementById('ask-status').innerHTML = '';
+  document.getElementById('ask-topic').style.display = 'none';
+  document.getElementById('ask-law').style.display = 'none';
+}
+
+function loadQ(btn) {
+  document.getElementById('ask-input').value = btn.textContent;
+}
+
+function setLoading(btnId, on) {
+  const btn = document.getElementById(btnId);
+  if (on) btn.classList.add('loading'); else btn.classList.remove('loading');
+}
+
+async function runSimplify() {
+  const text = document.getElementById('simp-input').value.trim();
+  if (!text) { alert('Please paste some legal text first.'); return; }
+  setLoading('simp-btn', true);
+  try {
+    const res = await fetch('/api/simplify', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({text})
+    });
+    const data = await res.json();
+    document.getElementById('simp-output').textContent = data.result;
+    document.getElementById('simp-status').innerHTML =
+      `<span class="status-ok"><i class="fas fa-check-circle"></i> Done in ${data.elapsed}s</span>
+       <span>${data.words_in} words in → ${data.words_out} words out</span>`;
+  } catch(e) {
+    document.getElementById('simp-output').textContent = 'Error: Could not connect to server.';
+  }
+  setLoading('simp-btn', false);
+}
+
+async function runAsk() {
+  const text = document.getElementById('ask-input').value.trim();
+  if (!text) { alert('Please type a question first.'); return; }
+  setLoading('ask-btn', true);
+  try {
+    const res = await fetch('/api/ask', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({text})
+    });
+    const data = await res.json();
+    document.getElementById('ask-output').textContent = data.answer;
+    const topicEl = document.getElementById('ask-topic');
+    const lawEl   = document.getElementById('ask-law');
+    topicEl.textContent = data.topic; topicEl.style.display = 'inline';
+    lawEl.textContent   = '📖 ' + data.law; lawEl.style.display = 'inline';
+    document.getElementById('ask-status').innerHTML =
+      `<span class="status-ok"><i class="fas fa-check-circle"></i> Answered in ${data.elapsed}s</span>`;
+  } catch(e) {
+    document.getElementById('ask-output').textContent = 'Error: Could not connect to server.';
+  }
+  setLoading('ask-btn', false);
+}
+
+function copyText(id) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target.closest('button');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+    setTimeout(() => btn.innerHTML = orig, 1500);
+  });
+}
+
+// Highlight nav on scroll
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#'+cur);
+  });
+});
+</script>
+</body>
+</html>

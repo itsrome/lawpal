@@ -1,0 +1,8 @@
+lawpal_env/
+__pycache__/
+*.pyc
+*.pyo
+lawpal_model/
+evaluation_results.json
+*.docx
+.kiro/

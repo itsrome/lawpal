@@ -1,0 +1,233 @@
+# -*- coding: utf-8 -*-
+"""
+Builds lawpal_training_data.json
+English + Amharic + Afaan Oromo, grounded in Ethiopian law.
+Run: python build_dataset.py
+"""
+import json
+
+data = []
+
+# ══════════════════════════════════════════
+#  ENGLISH
+# ══════════════════════════════════════════
+data += [
+  {"input":"What are my rights if I am arrested in Ethiopia?",
+   "output":"Under Article 19 of the Ethiopian Constitution (1995), when arrested you must be told the reason immediately. You have the right to remain silent, the right to a lawyer, and must be brought before a court within 48 hours. Torture is prohibited under Article 18.",
+   "lang":"en","category":"constitutional_rights","law":"Ethiopian Constitution Art.19, Art.18"},
+
+  {"input":"What does the Ethiopian Constitution say about the right to life?",
+   "output":"Article 14 of the Ethiopian Constitution guarantees every person the inviolable right to life. No one may be deprived of life arbitrarily.",
+   "lang":"en","category":"constitutional_rights","law":"Ethiopian Constitution Art.14"},
+
+  {"input":"What is the right to equality in Ethiopia?",
+   "output":"Article 25 of the Ethiopian Constitution guarantees equal protection of the law. No one shall be discriminated against on grounds of race, sex, language, religion, political opinion, or social status.",
+   "lang":"en","category":"constitutional_rights","law":"Ethiopian Constitution Art.25"},
+
+  {"input":"What does the Ethiopian Constitution say about freedom of expression?",
+   "output":"Article 29 of the Ethiopian Constitution protects freedom of thought and expression. Every person has the right to seek, receive, and share information through any media.",
+   "lang":"en","category":"constitutional_rights","law":"Ethiopian Constitution Art.29"},
+
+  {"input":"What is the right to a fair trial in Ethiopia?",
+   "output":"Article 20 of the Ethiopian Constitution guarantees a fair and public hearing. You are presumed innocent until proven guilty, have the right to a lawyer, and can appeal any decision.",
+   "lang":"en","category":"constitutional_rights","law":"Ethiopian Constitution Art.20"},
+
+  {"input":"Can I appeal a traffic fine in Ethiopia?",
+   "output":"Yes. Under Ethiopian Traffic Proclamation No. 1151/2019 you have the right to appeal a traffic fine. Submit your appeal in writing to the traffic authority within the deadline stated on the notice, usually 15 days.",
+   "lang":"en","category":"traffic","law":"Traffic Proclamation No.1151/2019"},
+
+  {"input":"What are the penalties for drunk driving in Ethiopia?",
+   "output":"Under Traffic Proclamation No. 1151/2019, drunk driving penalties include heavy fines, licence suspension, and possible imprisonment depending on severity.",
+   "lang":"en","category":"traffic","law":"Traffic Proclamation No.1151/2019"},
+
+  {"input":"What happens if I cause a traffic accident in Ethiopia?",
+   "output":"Under Traffic Proclamation No. 1151/2019, you must stop, assist injured persons, report to the police, and may face civil liability for compensation and criminal charges if negligence is proven.",
+   "lang":"en","category":"traffic","law":"Traffic Proclamation No.1151/2019"},
+
+  {"input":"Can my landlord enter my room without permission in Ethiopia?",
+   "output":"No. Under the Ethiopian Civil Code your landlord cannot enter your rented space without prior consent except in genuine emergencies. Entering without notice may constitute trespass.",
+   "lang":"en","category":"tenant_rights","law":"Ethiopian Civil Code"},
+
+  {"input":"Can a landlord evict me without notice in Ethiopia?",
+   "output":"No. Under Ethiopian law a landlord must give written notice with a valid legal reason. You have the right to contest the eviction in court. Changing locks without a court order is illegal.",
+   "lang":"en","category":"tenant_rights","law":"Ethiopian Civil Code"},
+
+  {"input":"Can my landlord keep my deposit in Ethiopia?",
+   "output":"A landlord may only keep your deposit for valid reasons such as unpaid rent or damage beyond normal wear. They must provide written explanation. You can take the matter to the first instance court if you disagree.",
+   "lang":"en","category":"tenant_rights","law":"Ethiopian Civil Code"},
+
+  {"input":"What makes a contract valid in Ethiopia?",
+   "output":"Under Ethiopian Civil Code Articles 1678-1690, a valid contract requires offer and acceptance, capacity of both parties, a lawful object, and genuine consent free from fraud or duress.",
+   "lang":"en","category":"contract","law":"Ethiopian Civil Code Art.1678-1690"},
+
+  {"input":"What happens if someone breaks a contract in Ethiopia?",
+   "output":"Under the Ethiopian Civil Code, a breach entitles the other party to claim damages, demand specific performance, or cancel the contract.",
+   "lang":"en","category":"contract","law":"Ethiopian Civil Code"},
+
+  {"input":"What does indemnify mean in a contract?",
+   "output":"Indemnify means to compensate or pay for a loss. If a contract says you must indemnify the other party, you agree to cover their losses if something goes wrong due to your actions.",
+   "lang":"en","category":"legal_terms","law":"Ethiopian Civil Code"},
+
+  {"input":"What are my rights as an employee in Ethiopia?",
+   "output":"Under Labour Proclamation No. 1156/2019, employees have the right to a written contract, timely wages, safe conditions, annual leave, sick leave, and protection from unfair dismissal.",
+   "lang":"en","category":"employment","law":"Labour Proclamation No.1156/2019"},
+
+  {"input":"Can my employer fire me without notice in Ethiopia?",
+   "output":"No. Under Labour Proclamation No. 1156/2019 an employer must give proper written notice. Unfair dismissal entitles the employee to compensation or reinstatement.",
+   "lang":"en","category":"employment","law":"Labour Proclamation No.1156/2019"},
+
+  {"input":"Can a university suspend a student without a hearing in Ethiopia?",
+   "output":"No. Under Higher Education Proclamation No. 1152/2019 a student must receive written notice of charges, the opportunity to present their defence, and a fair hearing before suspension.",
+   "lang":"en","category":"student_rights","law":"Higher Education Proclamation No.1152/2019"},
+
+  {"input":"What is the legal age of marriage in Ethiopia?",
+   "output":"Under the Revised Family Code 2000 the minimum legal age of marriage is 18 for both men and women. Child marriage is illegal and punishable under Criminal Code Article 648.",
+   "lang":"en","category":"family_law","law":"Revised Family Code 2000, Criminal Code Art.648"},
+
+  {"input":"How is divorce handled in Ethiopia?",
+   "output":"Under the Revised Family Code 2000, either spouse may file for divorce. The court divides marital property, decides child custody in the best interest of the child, and may order maintenance.",
+   "lang":"en","category":"family_law","law":"Revised Family Code 2000"},
+
+  {"input":"What is the punishment for theft in Ethiopia?",
+   "output":"Under Ethiopian Criminal Code Article 665, simple theft is punishable by up to 3 years imprisonment. Aggravated theft with weapons or organised crime carries up to 15 years.",
+   "lang":"en","category":"criminal_law","law":"Ethiopian Criminal Code Art.665"},
+
+  {"input":"What does null and void mean?",
+   "output":"Null and void means something has no legal effect. A contract declared null and void is treated as if it never existed.",
+   "lang":"en","category":"legal_terms","law":"Ethiopian Civil Code"},
+
+  {"input":"What is due process in Ethiopia?",
+   "output":"Due process means the right to fair legal procedures. Article 37 of the Ethiopian Constitution guarantees access to justice. Before action is taken against you, you must be notified and given a chance to respond.",
+   "lang":"en","category":"legal_terms","law":"Ethiopian Constitution Art.37"},
+
+  {"input":"What does breach mean in law?",
+   "output":"A breach is a violation or failure to fulfil a legal obligation. In contract law a breach occurs when one party fails to do what they promised.",
+   "lang":"en","category":"legal_terms","law":"Ethiopian Civil Code"},
+
+  {"input":"What is the right to education in Ethiopia?",
+   "output":"Article 41 of the Ethiopian Constitution recognises the right to education. Every citizen has the right to access education provided by the government.",
+   "lang":"en","category":"constitutional_rights","law":"Ethiopian Constitution Art.41"},
+
+  {"input":"What does liability mean?",
+   "output":"Liability means legal responsibility. If you are liable for something you are legally responsible for it and may have to pay for damages caused.",
+   "lang":"en","category":"legal_terms","law":"Ethiopian Civil Code"},
+]
+
+# ══════════════════════════════════════════
+#  AMHARIC
+# ══════════════════════════════════════════
+data += [
+  {"input":"በኢትዮጵያ ከተያዝኩ ምን መብቶች አሉኝ?",
+   "output":"በኢትዮጵያ ሕገ መንግሥት አንቀጽ 19 መሠረት፣ ሲያዙ ወዲያውኑ ምክንያቱ መነገር አለበት። ዝም የማለት መብት አለዎት፣ ጠበቃ የማግኘት መብት አለዎት፣ እና በ48 ሰዓት ውስጥ ፍርድ ቤት መቅረብ አለብዎት። ማሰቃየት በአንቀጽ 18 የተከለከለ ነው።",
+   "lang":"am","category":"constitutional_rights","law":"የኢትዮጵያ ሕገ መንግሥት አንቀጽ 19"},
+
+  {"input":"የኢትዮጵያ ሕገ መንግሥት ስለ ሕይወት መብት ምን ይላል?",
+   "output":"የኢትዮጵያ ሕገ መንግሥት አንቀጽ 14 እያንዳንዱ ሰው የማይጣስ የሕይወት መብት እንዳለው ያረጋግጣል። ማንም ሰው ያለ ሕጋዊ ምክንያት ሕይወቱ ሊነጠቅ አይችልም።",
+   "lang":"am","category":"constitutional_rights","law":"የኢትዮጵያ ሕገ መንግሥት አንቀጽ 14"},
+
+  {"input":"በኢትዮጵያ ሕግ ፍትሃዊ ችሎት የማግኘት መብት ምንድን ነው?",
+   "output":"አንቀጽ 20 ፍትሃዊ እና ግልጽ ችሎት የማግኘት መብትን ያረጋግጣል። ጥፋተኛ ሆኖ እስኪረጋገጥ ድረስ ንጹህ ነው ተብሎ ይቆጠራል፣ ጠበቃ የማግኘት እና ውሳኔን የመቃወም መብት አለዎት።",
+   "lang":"am","category":"constitutional_rights","law":"የኢትዮጵያ ሕገ መንግሥት አንቀጽ 20"},
+
+  {"input":"አከራዩ ፈቃዴ ሳይኖረው ክፍሌ ሊገባ ይችላል?",
+   "output":"አይችልም። የኢትዮጵያ የፍትሐ ብሔር ሕግ መሠረት አከራዩ ያለ ቅድሚያ ማስጠንቀቂያ እና ፈቃድዎ ሊገባ አይችልም። ያለ ፈቃድ መግባት ሕገ ወጥ ነው።",
+   "lang":"am","category":"tenant_rights","law":"የኢትዮጵያ የፍትሐ ብሔር ሕግ"},
+
+  {"input":"አከራዩ ያለ ማስጠንቀቂያ ሊያስወጣኝ ይችላል?",
+   "output":"አይችልም። አከራዩ ከማስወጣቱ በፊት ሕጋዊ ምክንያት ያለው የጽሑፍ ማስጠንቀቂያ መስጠት አለበት። ያለ ፍርድ ቤት ትዕዛዝ ቁልፍ መቀየር ሕገ ወጥ ነው።",
+   "lang":"am","category":"tenant_rights","law":"የኢትዮጵያ የፍትሐ ብሔር ሕግ"},
+
+  {"input":"በኢትዮጵያ የትራፊክ ቅጣት ይግባኝ ማለት ይቻላል?",
+   "output":"አዎ። በትራፊክ አዋጅ ቁጥር 1151/2019 መሠረት ቅጣቱ ፍትሃዊ ያልሆነ ሆኖ ካገኙት ይግባኝ የማለት መብት አለዎት። ይግባኙን በተጠቀሰው ቀነ ገደብ ውስጥ ማቅረብ አለብዎት።",
+   "lang":"am","category":"traffic","law":"የትራፊክ አዋጅ ቁጥር 1151/2019"},
+
+  {"input":"በኢትዮጵያ ሕግ ሥራ ቀጣሪ ያለ ማስጠንቀቂያ ሊያሰናብተኝ ይችላል?",
+   "output":"አይችልም። በሠራተኛ አዋጅ ቁጥር 1156/2019 መሠረት ቀጣሪው ተገቢ የጽሑፍ ማስጠንቀቂያ መስጠት አለበት። ፍትሃዊ ያልሆነ ሥራ ማቋረጥ ካሳ ወይም ወደ ሥራ መመለስ ያስፈልጋል።",
+   "lang":"am","category":"employment","law":"የሠራተኛ አዋጅ ቁጥር 1156/2019"},
+
+  {"input":"በኢትዮጵያ ዩኒቨርሲቲ ተማሪ ያለ ችሎት ሊታገድ ይችላል?",
+   "output":"አይችላም። ተማሪው ክሱን በጽሑፍ ማወቅ፣ ጉዳዩን የማቅረብ ዕድል፣ እና ፍትሃዊ ችሎት ማግኘት አለበት። ይህ በከፍተኛ ትምህርት አዋጅ ቁጥር 1152/2019 የተደነገገ ነው።",
+   "lang":"am","category":"student_rights","law":"የከፍተኛ ትምህርት አዋጅ ቁጥር 1152/2019"},
+
+  {"input":"በኢትዮጵያ ሕግ ጋብቻ ዕድሜ ስንት ነው?",
+   "output":"በተሻሻለው የቤተሰብ ሕግ 2000 መሠረት ዝቅተኛ የጋብቻ ዕድሜ ለሁለቱም ወንድ እና ሴት 18 ዓመት ነው። ከዚህ ዕድሜ በታች ጋብቻ ሕገ ወጥ ነው።",
+   "lang":"am","category":"family_law","law":"የተሻሻለ የቤተሰብ ሕግ 2000"},
+
+  {"input":"ስርቆት ቅጣት በኢትዮጵያ ምንድን ነው?",
+   "output":"በወንጀለኛ መቅጫ ሕግ አንቀጽ 665 መሠረት ቀላል ስርቆት እስከ 3 ዓመት እስራት ቅጣት አለው። መሣሪያ ጋር የተፈጸመ ስርቆት እስከ 15 ዓመት ሊደርስ ይችላል።",
+   "lang":"am","category":"criminal_law","law":"የወንጀለኛ መቅጫ ሕግ አንቀጽ 665"},
+
+  {"input":"ውል ሕጋዊ ለመሆን ምን ያስፈልጋል?",
+   "output":"በፍትሐ ብሔር ሕግ አንቀጽ 1678-1690 መሠረት ሕጋዊ ውል ለመሆን ሁለቱም ወገኖች ስምምነት ሊኖራቸው፣ ሕጋዊ ዓላማ ሊኖረው፣ እና ያለ ማስፈራሪያ ወይም ማታለል ሊፈረም ይገባል።",
+   "lang":"am","category":"contract","law":"የፍትሐ ብሔር ሕግ አንቀጽ 1678-1690"},
+
+  {"input":"አከራዩ ዋስትና ክፍያዬን ሊይዝ ይችላል?",
+   "output":"አከራዩ ዋስትና ክፍያን ሊይዝ የሚችለው ያልተከፈለ ኪራይ ወይም ከተለመደ ጉዳት በላይ ለሆነ ጉዳት ብቻ ነው። ለምን እንደያዘ በጽሑፍ ማስረዳት አለበት። ካልተስማሙ ወደ ፍርድ ቤት ሊሄዱ ይችላሉ።",
+   "lang":"am","category":"tenant_rights","law":"የኢትዮጵያ የፍትሐ ብሔር ሕግ"},
+]
+
+# ══════════════════════════════════════════
+#  AFAAN OROMO
+# ══════════════════════════════════════════
+data += [
+  {"input":"Itiyoophiyaatti yoo qabame mirgi koo maal?",
+   "output":"Heera Mootummaa Itiyoophiyaa Keewwata 19 jalatti, yoo qabamte sababi siif himamuu qaba. Mirga callisuu, mirga abukaatoo argachuu, fi sa'aatii 48 keessatti mana murtii dura dhihaachuu qabda. Hiraarsuun Keewwata 18 jalatti dhorkaa dha.",
+   "lang":"or","category":"constitutional_rights","law":"Heera Mootummaa Itiyoophiyaa Kw.19"},
+
+  {"input":"Heeri Mootummaa Itiyoophiyaa mirga lubbuuf maal jedha?",
+   "output":"Keewwata 14 Heera Mootummaa Itiyoophiyaa namni kamiyyuu mirga lubbuuf kan hin cabne qaba jedha. Sababii seeraa malee lubbuu namaa fuudhuu hin danda'amu.",
+   "lang":"or","category":"constitutional_rights","law":"Heera Mootummaa Itiyoophiyaa Kw.14"},
+
+  {"input":"Itiyoophiyaatti mirgi murtii haqaa maalii?",
+   "output":"Keewwata 20 dhaggeettii haqa qabeessa fi ifaa ta'e mirkanneessa. Yakkamaa ta'uu isaa mirkana'utti yakkamaa miti jedhama, abukaatoo argachuuf mirga qabda, fi murtii mormuuf mirga qabda.",
+   "lang":"or","category":"constitutional_rights","law":"Heera Mootummaa Itiyoophiyaa Kw.20"},
+
+  {"input":"Abbaan kireessaa hayyama koo malee kutaa koo seenuu danda'aa?",
+   "output":"Hin danda'u. Seeraa Sivil Itiyoophiyaa jalatti abbaan kireessaa beeksisa duraa fi hayyama keessan malee seenuu hin danda'u. Yeroo balaa hatattamaa malee hayyama malee seenuun seeraan ala dha.",
+   "lang":"or","category":"tenant_rights","law":"Seeraa Sivil Itiyoophiyaa"},
+
+  {"input":"Abbaan kireessaa beeksisa malee na ariiyachuu danda'aa?",
+   "output":"Hin danda'u. Seeraa Itiyoophiyaatti abbaan kireessaa beeksisa barreeffamaa sababii seeraa qabu kennuu qaba. Ajaja mana murtii malee cufaa jijjiiruu seeraan ala dha.",
+   "lang":"or","category":"tenant_rights","law":"Seeraa Sivil Itiyoophiyaa"},
+
+  {"input":"Itiyoophiyaatti adabbii tiraafikaa mormuun ni danda'amaa?",
+   "output":"Eeyyee. Labsii Tiraafikaa Lak. 1151/2019 jalatti, adabbiin haqaa hin qabu yoo ta'e mormuuf mirga qabda. Iyyannoo kee beeksisa irratti ibsame yeroo keessatti dhiyeessuu qabda.",
+   "lang":"or","category":"traffic","law":"Labsii Tiraafikaa Lak.1151/2019"},
+
+  {"input":"Itiyoophiyaatti hojjetaa beeksisa malee hojii irraa kaasuu ni danda'amaa?",
+   "output":"Hin danda'amu. Labsii Hojii Lak. 1156/2019 jalatti, qacaraan beeksisa barreeffamaa kennuu qaba. Haqaan ala hojii irraa kaasuu beenyaa ykn hojitti deebi'uu gaafachuu danda'a.",
+   "lang":"or","category":"employment","law":"Labsii Hojii Lak.1156/2019"},
+
+  {"input":"Itiyoophiyaatti barataan dhaggeettii malee ugguramuu danda'aa?",
+   "output":"Hin danda'amu. Labsii Barnootaa Ol'aanaa Lak. 1152/2019 jalatti, barataan himatni isaa barreeffamaan beeksifamuu, deebii kennachuuf carraa argachuu, fi dhaggeettii haqa qabeessa argachuu qaba.",
+   "lang":"or","category":"student_rights","law":"Labsii Barnootaa Ol'aanaa Lak.1152/2019"},
+
+  {"input":"Itiyoophiyaatti umrii heeruma seeraan qabame meeqa?",
+   "output":"Seera Maatii Fooyyaa'e 2000 jalatti, umrii heerumaa xiqqaan dhiiraaf illee dubartiidhaafu 18 dha. Heeruma daa'immanii seeraan ala yoo ta'e adabbii Seera Yakkaa Keewwata 648 jalatti ni qabaata.",
+   "lang":"or","category":"family_law","law":"Seera Maatii Fooyyaa'e 2000"},
+
+  {"input":"Saamichi adabbii Itiyoophiyaatti maalii?",
+   "output":"Seera Yakkaa Itiyoophiyaa Keewwata 665 jalatti, saami'ichii salphaan hanga waggaa 3 mana hidhaa itti murteessuu ni danda'ama. Meeshaa waraanaa waliin raawwatame hanga waggaa 15 ta'uu danda'a.",
+   "lang":"or","category":"criminal_law","law":"Seera Yakkaa Itiyoophiyaa Kw.665"},
+
+  {"input":"Itiyoophiyaatti waligaltee seeraan waan gaafatu maalii?",
+   "output":"Seera Sivil Itiyoophiyaa Keewwata 1678-1690 jalatti, waligaltee seeraan kan ta'u: lamaan isaaniituu waliigaluun, kaayyoo seeraan eeyyamamaa qabaachuu, dandeettii lamaan isaaniitiif jiraachuu, fi sarbuu ykn gowwoomsaa malee mallatteessuun barbaachisa.",
+   "lang":"or","category":"contract","law":"Seera Sivil Itiyoophiyaa Kw.1678-1690"},
+
+  {"input":"Abbaan kireessaa kuusaa koo qabachuu danda'aa?",
+   "output":"Abbaan kireessaa kuusaa kee kan qabatu kireeffannaa hin kaffalamne ykn miidhaa caalanaa rakkoo idilee gidduuf qofa. Maaliif akka qabate barreeffamaan ibsuu qaba. Yoo waliigaluu baattan mana murtiitti dhiyaachuu nidanda'ama.",
+   "lang":"or","category":"tenant_rights","law":"Seeraa Sivil Itiyoophiyaa"},
+]
+
+# ══════════════════════════════════════════
+#  SAVE
+# ══════════════════════════════════════════
+with open("lawpal_training_data.json", "w", encoding="utf-8") as f:
+    json.dump(data, f, ensure_ascii=False, indent=2)
+
+print(f"Done. {len(data)} examples saved to lawpal_training_data.json")
+cats = {}
+for d in data:
+    cats[d['lang']] = cats.get(d['lang'], 0) + 1
+for k,v in cats.items():
+    print(f"  {k}: {v} examples")
