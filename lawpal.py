@@ -77,6 +77,54 @@ ABBREVIATIONS = {"mr", "mrs", "ms", "dr", "prof", "sr", "jr", "vs", "etc",
                  "apr", "jun", "jul", "aug", "sep", "oct", "nov", "dec"}
 
 # ─────────────────────────────────────────────
+#  AMHARIC WORD MAP
+# ─────────────────────────────────────────────
+WORD_MAP_AM = {
+    "ተከራዩ": "ቤቱን የሚከራይ ሰው",
+    "አከራዩ": "ቤቱን ያከራየ ባለቤት",
+    "ኢንደምኒፋይ": "ካሳ መክፈል",
+    "ዋስትና": "የብድር ዋስ",
+    "ኪሳራ": "ጉዳት",
+    "ሕጋዊ ኃላፊነት": "ሕጋዊ ግዴታ",
+    "ቅጣት": "የሕግ ቅጣት",
+    "ውል": "ስምምነት",
+    "ይግባኝ": "ይግባኝ ጥያቄ",
+    "ጥሰት": "ሕግ መጣስ",
+    "ማስጠንቀቂያ": "ቅድሚያ ማሳወቂያ",
+    "አዋጅ": "ሕጋዊ አዋጅ",
+    "ሕገ መንግሥት": "የሀገር ዋና ሕግ",
+}
+
+# ─────────────────────────────────────────────
+#  AFAAN OROMO WORD MAP
+# ─────────────────────────────────────────────
+WORD_MAP_OR = {
+    "kireeffataa": "namni mana kireeffate",
+    "kireessaa": "abbaa manaa",
+    "beenyaa": "kaffalti miidhaa",
+    "waliigaltee": "waliigaltee seera qabeessa",
+    "adabbii": "adabbii seeraa",
+    "mirga": "mirga seeraan kenname",
+    "dhorkaa": "seeraan dhorkaame",
+    "labsii": "labsii mootummaa",
+    "heera": "heera mootummaa",
+    "iyyannoo": "iyyannoo dhiyeessuu",
+    "beeksisa": "beeksisa duraa",
+    "seera": "seera biyyaa",
+    "hidhaa": "mana hidhaatti erguu",
+    "bilisummaa": "bilisummaa dhuunfaa",
+}
+
+def detect_lang(text):
+    amharic_chars = sum(1 for c in text if '\u1200' <= c <= '\u137f')
+    if amharic_chars > 3:
+        return 'am'
+    oromo_kw = ['kireeffataa','kireessaa','mana','beenyaa','labsii','heera','mirga','seera']
+    if any(w in text.lower() for w in oromo_kw):
+        return 'or'
+    return 'en'
+
+# ─────────────────────────────────────────────
 #  RULE BASE  (keyword sets → answers)
 # ─────────────────────────────────────────────
 RULES = [
@@ -260,33 +308,38 @@ def split_sentences(text):
 
 def simplify_text(text):
     """Replace complex legal words and shorten sentences."""
-    start = time.time()
+    start  = time.time()
     result = text
+    lang   = detect_lang(text)
 
-    # Replace multi-word phrases first (longest first)
-    sorted_phrases = sorted(WORD_MAP.keys(), key=len, reverse=True)
-    for phrase in sorted_phrases:
-        pattern = re.compile(r'\b' + re.escape(phrase) + r'\b', re.IGNORECASE)
-        replacement = WORD_MAP[phrase]
+    if lang == 'am':
+        wmap = WORD_MAP_AM
+    elif lang == 'or':
+        wmap = WORD_MAP_OR
+    else:
+        wmap = WORD_MAP
+
+    for phrase in sorted(wmap.keys(), key=len, reverse=True):
+        pattern = re.compile(re.escape(phrase), re.IGNORECASE)
+        replacement = wmap[phrase]
         result = pattern.sub(
             lambda m, r=replacement: r[0].upper() + r[1:]
             if m.group(0)[0].isupper() else r,
             result
         )
 
-    # Split into sentences and clean up
     sentences = split_sentences(result)
     simplified_sentences = []
     for s in sentences:
         s = s.strip()
         if not s:
             continue
-        # Remove overly formal openers
         s = re.sub(r'^(It is hereby|Be it known that|Know all men by these presents that)\s*', '', s, flags=re.IGNORECASE)
         simplified_sentences.append(s)
 
     elapsed = time.time() - start
     return '\n'.join(simplified_sentences), round(elapsed, 4)
+
 
 
 def is_question(text):

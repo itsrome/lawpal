@@ -40,6 +40,54 @@ WORD_MAP = {
 
 ABBREVIATIONS = {"mr","mrs","ms","dr","prof","sr","jr","vs","etc","no","art","sec"}
 
+# ── Amharic Word Map ──
+WORD_MAP_AM = {
+    "ተከራዩ": "ቤቱን የሚከራይ ሰው",
+    "አከራዩ": "ቤቱን ያከራየ ባለቤት",
+    "ኢንደምኒፋይ": "ካሳ መክፈል",
+    "ኢንደምኒፊኬሽን": "የካሳ ክፍያ",
+    "ዋስትና": "የብድር ዋስ",
+    "ኪሳራ": "ጉዳት",
+    "ሕጋዊ ኃላፊነት": "ሕጋዊ ግዴታ",
+    "ቅጣት": "የሕግ ቅጣት",
+    "ማስረጃ": "ማስረጃ ሰነድ",
+    "ውል": "ስምምነት",
+    "ፍርድ ቤት": "ፍርድ ቤት",
+    "ይግባኝ": "ይግባኝ ጥያቄ",
+    "ጥሰት": "ሕግ መጣስ",
+    "ፍቃድ": "ፈቃድ",
+    "ማስጠንቀቂያ": "ቅድሚያ ማሳወቂያ",
+    "ስምምነት": "ዋጋ ያለው ልውውጥ",
+    "ፍርድ": "ፍርድ ውሳኔ",
+    "ሕጋዊ": "በሕግ የተደነገገ",
+    "አዋጅ": "ሕጋዊ አዋጅ",
+    "ሕገ መንግሥት": "የሀገር ዋና ሕግ",
+}
+
+# ── Afaan Oromo Word Map ──
+WORD_MAP_OR = {
+    "kireeffataa": "namni mana kireeffate",
+    "kireessaa": "abbaa manaa",
+    "beenyaa": "kaffalti miidhaa",
+    "waliigaltee": "waliigaltee seera qabeessa",
+    "adabbii": "adabbii seeraa",
+    "mirga": "mirga seeraan kenname",
+    "dhorkaa": "seeraan dhorkaame",
+    "labsii": "labsii mootummaa",
+    "heera": "heera mootummaa",
+    "mana murtii": "mana murtii",
+    "iyyannoo": "iyyannoo dhiyeessuu",
+    "beeksisa": "beeksisa duraa",
+    "seera": "seera biyyaa",
+    "ragaa": "ragaa ragachiisaa",
+    "waligaltee": "waligaltee haqaa qabu",
+    "himatamaa": "namni himatame",
+    "himattuu": "namni himatichi",
+    "murtii": "murtii mana murtii",
+    "hidhaa": "mana hidhaatti erguu",
+    "bilisummaa": "bilisummaa dhuunfaa",
+}
+
 RULES = [
     {"keywords":["landlord","enter","room","permission"],"topic":"Tenant Rights – Landlord Entry",
      "law":"Ethiopian Civil Code",
@@ -100,24 +148,41 @@ def split_sentences(text):
         i += 1
     return merged
 
+def detect_lang(text):
+    """Detect if text is Amharic, Afaan Oromo, or English."""
+    amharic_chars = sum(1 for c in text if '\u1200' <= c <= '\u137f')
+    if amharic_chars > 3:
+        return 'am'
+    oromo_keywords = ['kireeffataa','kireessaa','mana','beenyaa','labsii','heera','mirga','seera','waliigaltee']
+    if any(w in text.lower() for w in oromo_keywords):
+        return 'or'
+    return 'en'
+
 def simplify(text):
     start  = time.time()
     result = text
+    lang   = detect_lang(text)
 
-    # Replace multi-word phrases first (longest first to avoid partial matches)
-    sorted_phrases = sorted(WORD_MAP.keys(), key=len, reverse=True)
-    for phrase in sorted_phrases:
-        pattern = re.compile(r'\b' + re.escape(phrase) + r'\b', re.IGNORECASE)
-        repl    = WORD_MAP[phrase]
+    # Pick correct word map
+    if lang == 'am':
+        wmap = WORD_MAP_AM
+    elif lang == 'or':
+        wmap = WORD_MAP_OR
+    else:
+        wmap = WORD_MAP
+
+    # Replace terms (longest first)
+    for phrase in sorted(wmap.keys(), key=len, reverse=True):
+        pattern = re.compile(re.escape(phrase), re.IGNORECASE)
+        repl    = wmap[phrase]
         result  = pattern.sub(
             lambda m, r=repl: r[0].upper() + r[1:] if m.group(0)[0].isupper() else r,
             result
         )
 
-    # Clean up formal openers
+    # Clean formal openers (English)
     result = re.sub(r'^\s*(It is hereby|Be it known that|Know all men by these presents that)\s*', '', result, flags=re.IGNORECASE)
 
-    # Split into sentences and strip
     sentences = [s.strip() for s in split_sentences(result) if s.strip()]
     result    = '\n'.join(sentences)
 
