@@ -179,7 +179,11 @@ html{scroll-behavior:smooth}
           <button class="btn-sm btn-run" id="simp-btn" onclick="runSimplify()">
             <span class="spinner"></span><span class="btn-text"><i class="fas fa-bolt"></i> Simplify</span>
           </button>
-          <button class="btn-sm btn-eg" onclick="loadExample()"><i class="fas fa-file-lines"></i> Example</button>
+          <div style="position:relative;display:inline-block">
+            <button class="btn-sm btn-eg" onclick="toggleExamples()" id="eg-btn"><i class="fas fa-file-lines"></i> Examples ▾</button>
+            <div id="eg-dropdown" style="display:none;position:absolute;top:110%;left:0;background:var(--card);border:1px solid var(--border);border-radius:10px;z-index:50;min-width:220px;padding:.4rem 0;box-shadow:var(--shadow)">
+            </div>
+          </div>
           <button class="btn-sm btn-clr" onclick="clearSimplify()"><i class="fas fa-trash"></i> Clear</button>
         </div>
       </div>
@@ -300,20 +304,94 @@ html{scroll-behavior:smooth}
 let currentLang = 'en';
 
 const EXAMPLES = {
-  en: "The lessee hereby agrees to indemnify the lessor against any and all losses, damages, or claims arising from the lessee's use or occupancy of the leased premises, including but not limited to those caused by negligence or willful misconduct. Notwithstanding the aforementioned, the lessor shall forthwith notify the lessee pursuant to the provisions herein.",
-  am: "ተከራዩ ቤቱን ሲጠቀም ወይም ሲኖርበት ከሚደርሰው ማናቸውም ኪሳራ፣ ጉዳት ወይም ጥያቄ አከራዩን ለመካስ ይስማማል። ይህ ቢሆንም አከራዩ ወዲያውኑ ተከራዩን ማሳወቅ አለበት።",
-  or: "Kireessaan mana kireeffataa fayyadamuun yookiin keessatti jiraachuun miidhaa, kasaaraa, yookiin gaaffii kamiyyuu kaffaluuf waliigala. Kana malees, kireessaan hatattamaan kireeffataa beeksisuu qaba."
+  en: [
+    {
+      label: "Rental Contract",
+      text: "The lessee hereby agrees to indemnify the lessor against any and all losses, damages, or claims arising from the lessee's use or occupancy of the leased premises, including but not limited to those caused by negligence or willful misconduct. Notwithstanding the aforementioned, the lessor shall forthwith notify the lessee pursuant to the provisions herein."
+    },
+    {
+      label: "Employment Contract",
+      text: "The employee shall forthwith comply with all lawful directions of the employer pursuant to the terms herein. Notwithstanding any aforementioned provisions, the employer reserves the right to terminate this agreement with due notice in accordance with applicable labour statutes. Any breach of this covenant shall render the agreement null and void."
+    },
+    {
+      label: "Loan Agreement",
+      text: "The borrower hereby agrees to indemnify the lender against any default arising from non-payment of the collateral obligation. The lessee shall be liable for restitution of damages pursuant to the aforementioned clause. In accordance with the applicable statute, the lender may forthwith initiate litigation proceedings."
+    },
+    {
+      label: "Court Notice",
+      text: "Be it known that the aforementioned defendant is hereby required to appear forthwith before the competent jurisdiction pursuant to the subpoena issued herein. Notwithstanding any prior adjudication, the plaintiff's remedy shall be determined in accordance with the applicable statute of limitations."
+    }
+  ],
+  am: [
+    {
+      label: "የኪራይ ውል",
+      text: "ተከራዩ ቤቱን ሲጠቀም ወይም ሲኖርበት ከሚደርሰው ማናቸውም ኪሳራ፣ ጉዳት ወይም ጥያቄ አከራዩን ለማካስ ይስማማል። ይህ ቢሆንም አከራዩ ወዲያውኑ ተከራዩን ማሳወቅ አለበት። ዋስትናው ያለ ቅድሚያ ማስጠንቀቂያ ሊወሰድ አይችልም።"
+    },
+    {
+      label: "የሥራ ውል",
+      text: "ሠራተኛው ቀጣሪው በሚሰጣቸው ሕጋዊ መመሪያዎች መሠረት መሥራት አለበት። ቀጣሪው ሠራተኛውን ያለ ቅድሚያ ማስጠንቀቂያ ሊያሰናብት አይችልም። ቅጣት ከወሰደ ሕጋዊ ይግባኝ ማለት ይቻላል።"
+    },
+    {
+      label: "የፍርድ ቤት ጥሪ",
+      text: "ተከሳሹ ወዲያውኑ ፍርድ ቤት እንዲቀርብ ይታዘዛል። ያለ ማስጠንቀቂያ ቀርቦ ካልተገኘ ቅጣት ሊጣልበት ይችላል። ሕጋዊ ኃላፊነቱን ለመወጣት ዋስትና ማቅረብ ሊጠየቅ ይችላል።"
+    }
+  ],
+  or: [
+    {
+      label: "Waliigaltee Kireeffannaa",
+      text: "Kireeffataan mana kireeffataa fayyadamuun yookiin keessatti jiraachuun miidhaa, kasaaraa, yookiin gaaffii kamiyyuu kaffaluuf waliigala. Kana malees, kireessaan hatattamaan kireeffataa beeksisuu qaba. Beenyaan beeksisa duraa malee fudhatamuu hin danda'u."
+    },
+    {
+      label: "Waliigaltee Hojii",
+      text: "Hojjetaan qacaraan kennuuf ajaja hunda hordofuu qaba. Qacaraan hojjetaa beeksisa barreeffamaa malee hojii irraa kaasuu hin danda'u. Adabbiin kenname yoo haqaa hin taane iyyannoo dhiyeessuu ni danda'ama."
+    },
+    {
+      label: "Beeksisa Mana Murtii",
+      text: "Himatamaan hatattamaan mana murtii dura dhihaachuu qaba. Beeksisa malee dhihaachuu baate adabbii irratti murteeffamuu danda'a. Mirga isaa kabachiisuuf abukaatoo argachuu ni danda'a."
+    }
+  ]
 };
 
 function setLang(lang, btn) {
   currentLang = lang;
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  buildExampleDropdown();
 }
 
-function loadExample() {
-  document.getElementById('simp-input').value = EXAMPLES[currentLang];
+function buildExampleDropdown() {
+  const dd = document.getElementById('eg-dropdown');
+  dd.innerHTML = '';
+  (EXAMPLES[currentLang] || EXAMPLES['en']).forEach(ex => {
+    const item = document.createElement('button');
+    item.textContent = ex.label;
+    item.style.cssText = 'display:block;width:100%;background:none;border:none;color:var(--text);padding:.6rem 1rem;text-align:left;cursor:pointer;font-family:Inter,sans-serif;font-size:.85rem';
+    item.onmouseover = () => item.style.background = 'var(--hover)';
+    item.onmouseout  = () => item.style.background = 'none';
+    item.onclick = () => {
+      document.getElementById('simp-input').value = ex.text;
+      document.getElementById('eg-dropdown').style.display = 'none';
+    };
+    dd.appendChild(item);
+  });
 }
+
+function toggleExamples() {
+  const dd = document.getElementById('eg-dropdown');
+  if (dd.style.display === 'none') {
+    buildExampleDropdown();
+    dd.style.display = 'block';
+  } else {
+    dd.style.display = 'none';
+  }
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('#eg-btn') && !e.target.closest('#eg-dropdown')) {
+    const dd = document.getElementById('eg-dropdown');
+    if (dd) dd.style.display = 'none';
+  }
+});
 
 function clearSimplify() {
   document.getElementById('simp-input').value = '';
